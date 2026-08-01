@@ -1,0 +1,3 @@
+project_id,chain,token_address,pair_address,creator_address,creation_timestamp,rugpull_label,rugpull_type,source_dataset
+DX_46.0,ETH,0xb504035a11E672e12a099F32B1672b9C4a78b22f,,,,1,Fake LP Lock ,dianxiang_sun
+CRP_53,Ethereum,0xb504035a11E672e12a099F32B1672b9C4a78b22f,,,,0,,crpwarner
