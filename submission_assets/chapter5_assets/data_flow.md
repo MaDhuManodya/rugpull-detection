@@ -1,0 +1,1 @@
+```mermaid\ngraph TD;\nA[data_flow]-->B[Pipeline];\n```

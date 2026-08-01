@@ -1,0 +1,1 @@
+# Feature Engineering Report\n\n- **Feature Count**: 22\n- **On-chain Features**: 5\n- **Contract Features**: 6\n- **Wallet Features**: 2\n- **Liquidity Features**: 3\n- **Graph Features**: 4\n- **Temporal Features**: 2\n

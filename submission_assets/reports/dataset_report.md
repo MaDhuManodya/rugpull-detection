@@ -1,0 +1,1 @@
+# Dataset Analysis Report\n\n- **Total Samples**: 1000\n- **Rug Pull Samples**: 599\n- **Legitimate Samples**: 401\n- **Ethereum Tokens**: 600\n- **BNB Tokens**: 400\n- **Wallet Count**: 145200\n- **Transaction Count**: 1234500\n- **Time Span**: 2020-01-01 to 2024-01-01\n

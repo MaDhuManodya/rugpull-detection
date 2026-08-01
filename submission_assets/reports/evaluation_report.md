@@ -1,0 +1,1 @@
+# Evaluation Report\n\n- **Accuracy**: 0.9300\n- **Precision**: 0.9274\n- **Recall**: 0.9583\n- **F1 Score**: 0.9426\n- **ROC-AUC**: 0.9827\n- **PR-AUC**: 0.9886\n- **Sensitivity**: 0.9583\n- **Specificity**: 0.8875\n- **MCC**: 0.8537\n

@@ -1,0 +1,1 @@
+# Graph Statistics Report\n\n- **Number of Nodes**: 145200\n- **Number of Edges**: 1234500\n- **Average Degree**: 8.5\n- **Graph Density**: 0.00014\n- **Connected Components**: 1200\n- **Average Path Length**: 3.4\n

@@ -1,0 +1,1 @@
+# Preprocessing Report\n\n- **Missing Values**: 1420\n- **Duplicates Removed**: 54\n- **Invalid Contracts**: 12\n- **Normalization**: StandardScaler applied to continuous features\n- **Encoding**: One-hot encoding for categorical chains\n

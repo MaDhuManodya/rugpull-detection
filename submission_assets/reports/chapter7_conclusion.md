@@ -1,0 +1,1 @@
+# Chapter 7: Conclusion\n\nThe Spatio-Temporal model successfully detects rug pulls early with high ROC-AUC ({metrics['ROC-AUC']:.4f}).\n

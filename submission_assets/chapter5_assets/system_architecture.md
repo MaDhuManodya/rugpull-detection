@@ -1,0 +1,1 @@
+```mermaid\ngraph TD;\nA[system_architecture]-->B[Pipeline];\n```

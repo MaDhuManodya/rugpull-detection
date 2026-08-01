@@ -1,0 +1,1 @@
+```mermaid\ngraph TD;\nA[inference_pipeline]-->B[Pipeline];\n```

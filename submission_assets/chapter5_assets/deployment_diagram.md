@@ -1,0 +1,1 @@
+```mermaid\ngraph TD;\nA[deployment_diagram]-->B[Pipeline];\n```

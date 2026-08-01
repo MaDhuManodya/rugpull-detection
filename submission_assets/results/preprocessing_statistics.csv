@@ -1,0 +1,6 @@
+,0
+Missing Values,1420
+Duplicates Removed,54
+Invalid Contracts,12
+Normalization,StandardScaler applied to continuous features
+Encoding,One-hot encoding for categorical chains
