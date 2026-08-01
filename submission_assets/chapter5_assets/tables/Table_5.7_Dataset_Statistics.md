@@ -1,0 +1,11 @@
+| Metric        |   Value |
+|:--------------|--------:|
+| Total Samples |    3427 |
+| Positive      |    3000 |
+| Negative      |     427 |
+| Ethereum      |    2989 |
+| BSC           |     391 |
+| Polygon       |      24 |
+| Train         |    2398 |
+| Validation    |     514 |
+| Test          |     515 |
