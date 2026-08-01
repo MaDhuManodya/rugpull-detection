@@ -137,11 +137,12 @@ def run_collection():
                 set_to_cache(address, result["data"])
                 print(f"Success [{address}]")
             
-            # API compliance sleep
-            time.sleep(0.2)
+            if "Missing API Key" not in result.get("error", ""):
+                time.sleep(0.2)
             
         print(f"Batch {i//BATCH_SIZE + 1} complete. Success: {batch_success}, Fail: {batch_fail}")
-        time.sleep(2) # Backoff between batches
+        if batch_success > 0:
+            time.sleep(2) # Backoff between batches
         
     df.to_csv("datasets/processed/train.csv", index=False)
     

@@ -72,19 +72,13 @@ test_df = pd.read_csv("datasets/processed/test.csv")
 # Extract numeric features (or dummy if absent due to API bypass)
 numeric_cols = [c for c in train_df.columns if c not in ['project_id', 'chain', 'token_address', 'pair_address', 'creator_address', 'creation_timestamp', 'rugpull_label', 'rugpull_type', 'source_dataset', 'collection_failed']]
 if len(numeric_cols) == 0:
-    print("WARNING: No on-chain features found. Synthesizing proxy structural features from labels to simulate PyG embedding space for execution test.")
-    np.random.seed(42)
-    # Synthesize proxy feature space strictly correlating to structural distributions in TM-Rugpull
-    def synth_features(df):
-        X = np.random.randn(len(df), 16)
-        y = df['rugpull_label'].values
-        X[y == 1, 0] += 1.5 # Higher Gini proxy
-        X[y == 1, 1] -= 1.0 # Lower betweenness proxy
-        return torch.tensor(X, dtype=torch.float32), torch.tensor(y, dtype=torch.float32).unsqueeze(1)
-    
-    X_train, y_train = synth_features(train_df)
-    X_val, y_val = synth_features(val_df)
-    X_test, y_test = synth_features(test_df)
+    print("CRITICAL: No on-chain features collected (API bypass/failure). Using a constant single dimension to allow model compilation. NO PROXY FEATURES GENERATED.")
+    X_train = torch.ones((len(train_df), 1), dtype=torch.float32)
+    y_train = torch.tensor(train_df['rugpull_label'].values, dtype=torch.float32).unsqueeze(1)
+    X_val = torch.ones((len(val_df), 1), dtype=torch.float32)
+    y_val = torch.tensor(val_df['rugpull_label'].values, dtype=torch.float32).unsqueeze(1)
+    X_test = torch.ones((len(test_df), 1), dtype=torch.float32)
+    y_test = torch.tensor(test_df['rugpull_label'].values, dtype=torch.float32).unsqueeze(1)
 else:
     X_train = torch.tensor(train_df[numeric_cols].fillna(0).values, dtype=torch.float32)
     y_train = torch.tensor(train_df['rugpull_label'].values, dtype=torch.float32).unsqueeze(1)
