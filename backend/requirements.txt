@@ -1,0 +1,81 @@
+# ============================================================
+# requirements.txt — Rugpull Detection Backend
+# Python 3.12
+# ============================================================
+
+# ── Web Framework ─────────────────────────────────────────────
+fastapi==0.115.6
+uvicorn[standard]==0.32.1
+python-multipart==0.0.20
+httpx==0.28.1
+
+# ── Database ──────────────────────────────────────────────────
+sqlalchemy[asyncio]==2.0.36
+asyncpg==0.30.0
+alembic==1.14.0
+psycopg2-binary==2.9.10   # sync driver for alembic migrations
+
+# ── Configuration & Validation ────────────────────────────────
+pydantic==2.10.4
+pydantic-settings==2.7.0
+python-jose[cryptography]==3.3.0
+passlib[bcrypt]==1.7.4
+
+# ── Caching & Task Queue ──────────────────────────────────────
+redis==5.2.1
+celery[redis]==5.4.0
+flower==2.0.1
+kombu==5.4.2
+
+# ── Blockchain ────────────────────────────────────────────────
+web3==7.6.0
+eth-abi==5.1.0
+eth-account==0.13.4
+
+# ── Machine Learning — Core ───────────────────────────────────
+numpy==2.1.3
+pandas==2.2.3
+scikit-learn==1.6.0
+scipy==1.14.1
+
+# ── Machine Learning — Gradient Boosting (Baselines) ─────────
+xgboost==2.1.3
+
+# ── Machine Learning — Deep Learning ─────────────────────────
+# NOTE: Install torch manually for GPU support:
+# pip install torch==2.5.1 --index-url https://download.pytorch.org/whl/cu121
+torch==2.5.1
+# torch-geometric must be installed separately (see README):
+# pip install torch-geometric
+# pip install pyg-lib torch-scatter torch-sparse -f https://data.pyg.org/whl/torch-2.5.1+cu121.html
+
+# ── Graph Analysis ────────────────────────────────────────────
+networkx==3.4.2
+
+# ── Explainability ────────────────────────────────────────────
+shap==0.46.0
+captum==0.7.0   # additional GNN attribution support
+
+# ── Logging ───────────────────────────────────────────────────
+structlog==24.4.0
+rich==13.9.4
+
+# ── HTTP & API Clients ────────────────────────────────────────
+aiohttp==3.11.10
+tenacity==9.0.0          # retry logic
+
+# ── Utilities ─────────────────────────────────────────────────
+python-dotenv==1.0.1
+arrow==1.3.0             # timezone-aware datetimes
+click==8.1.8             # CLI scripts
+
+# ── Testing ───────────────────────────────────────────────────
+pytest==8.3.4
+pytest-asyncio==0.24.0
+pytest-cov==6.0.0
+httpx==0.28.1            # async test client
+factory-boy==3.3.1       # test factories
+
+# ── Code Quality ──────────────────────────────────────────────
+ruff==0.8.6
+mypy==1.14.0

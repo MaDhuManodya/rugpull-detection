@@ -1,0 +1,158 @@
+version: "3.9"
+
+services:
+  # ── PostgreSQL Database ──────────────────────────────────────────
+  postgres:
+    image: postgres:16-alpine
+    container_name: rugpull_postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-rugpull}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-rugpull_secret}
+      POSTGRES_DB: ${POSTGRES_DB:-rugpull_db}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-rugpull}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - rugpull_net
+
+  # ── Redis (Cache + Celery Broker) ────────────────────────────────
+  redis:
+    image: redis:7-alpine
+    container_name: rugpull_redis
+    restart: unless-stopped
+    command: redis-server --appendonly yes --requirepass ${REDIS_PASSWORD:-redis_secret}
+    volumes:
+      - redis_data:/data
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "-a", "${REDIS_PASSWORD:-redis_secret}", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - rugpull_net
+
+  # ── FastAPI Backend ───────────────────────────────────────────────
+  api:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+      target: development
+    container_name: rugpull_api
+    restart: unless-stopped
+    environment:
+      - DATABASE_URL=postgresql+asyncpg://${POSTGRES_USER:-rugpull}:${POSTGRES_PASSWORD:-rugpull_secret}@postgres:5432/${POSTGRES_DB:-rugpull_db}
+      - REDIS_URL=redis://:${REDIS_PASSWORD:-redis_secret}@redis:6379/0
+      - CELERY_BROKER_URL=redis://:${REDIS_PASSWORD:-redis_secret}@redis:6379/1
+      - CELERY_RESULT_BACKEND=redis://:${REDIS_PASSWORD:-redis_secret}@redis:6379/2
+    env_file:
+      - ./backend/.env
+    volumes:
+      - ./backend:/app
+      - ./trained_models:/app/trained_models
+      - ./datasets:/app/datasets
+    ports:
+      - "8000:8000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - rugpull_net
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload --log-level info
+
+  # ── Celery Worker ─────────────────────────────────────────────────
+  celery_worker:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+      target: development
+    container_name: rugpull_celery
+    restart: unless-stopped
+    environment:
+      - DATABASE_URL=postgresql+asyncpg://${POSTGRES_USER:-rugpull}:${POSTGRES_PASSWORD:-rugpull_secret}@postgres:5432/${POSTGRES_DB:-rugpull_db}
+      - REDIS_URL=redis://:${REDIS_PASSWORD:-redis_secret}@redis:6379/0
+      - CELERY_BROKER_URL=redis://:${REDIS_PASSWORD:-redis_secret}@redis:6379/1
+      - CELERY_RESULT_BACKEND=redis://:${REDIS_PASSWORD:-redis_secret}@redis:6379/2
+    env_file:
+      - ./backend/.env
+    volumes:
+      - ./backend:/app
+      - ./trained_models:/app/trained_models
+      - ./datasets:/app/datasets
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - rugpull_net
+    command: celery -A app.celery_app worker --loglevel=info --concurrency=2 -Q default,ml,collection
+
+  # ── Flower (Celery Monitor) ───────────────────────────────────────
+  flower:
+    image: mher/flower:2.0
+    container_name: rugpull_flower
+    restart: unless-stopped
+    environment:
+      - CELERY_BROKER_URL=redis://:${REDIS_PASSWORD:-redis_secret}@redis:6379/1
+      - FLOWER_PORT=5555
+      - FLOWER_BASIC_AUTH=${FLOWER_USER:-admin}:${FLOWER_PASSWORD:-flower_secret}
+    ports:
+      - "5555:5555"
+    depends_on:
+      - redis
+    networks:
+      - rugpull_net
+
+  # ── PgAdmin (Database GUI) ────────────────────────────────────────
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: rugpull_pgadmin
+    restart: unless-stopped
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_EMAIL:-admin@rugpull.dev}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_PASSWORD:-pgadmin_secret}
+    ports:
+      - "5050:80"
+    depends_on:
+      - postgres
+    networks:
+      - rugpull_net
+
+  # ── Frontend (Next.js) ────────────────────────────────────────────
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: rugpull_frontend
+    restart: unless-stopped
+    environment:
+      - NEXT_PUBLIC_API_URL=http://localhost:8000
+    ports:
+      - "3000:3000"
+    depends_on:
+      - api
+    networks:
+      - rugpull_net
+    profiles:
+      - frontend
+
+volumes:
+  postgres_data:
+    driver: local
+  redis_data:
+    driver: local
+
+networks:
+  rugpull_net:
+    driver: bridge

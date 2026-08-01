@@ -1,0 +1,107 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.backends.legacy:build"
+
+[project]
+name = "rugpull-detection-backend"
+version = "0.1.0"
+description = "Early Rug Pull Detection in Blockchain Using Graph Neural Networks and Temporal Learning"
+requires-python = ">=3.12"
+readme = "README.md"
+license = { text = "MIT" }
+authors = [{ name = "Research Author" }]
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["app*"]
+
+# ── Ruff (Linter + Formatter) ────────────────────────────────
+[tool.ruff]
+target-version = "py312"
+line-length = 100
+src = ["app"]
+exclude = [
+    ".git",
+    ".venv",
+    "__pycache__",
+    "alembic/versions",
+]
+
+[tool.ruff.lint]
+select = [
+    "E",   # pycodestyle errors
+    "W",   # pycodestyle warnings
+    "F",   # pyflakes
+    "I",   # isort
+    "B",   # flake8-bugbear
+    "C4",  # flake8-comprehensions
+    "UP",  # pyupgrade
+    "N",   # pep8-naming
+    "ANN", # flake8-annotations (type hints)
+    "S",   # bandit (security)
+    "A",   # flake8-builtins
+    "RUF", # ruff-specific
+]
+ignore = [
+    "ANN101",  # missing type annotation for self
+    "ANN102",  # missing type annotation for cls
+    "S101",    # use of assert (ok in tests)
+    "B008",    # do not perform function calls in argument defaults (FastAPI Depends)
+]
+
+[tool.ruff.lint.per-file-ignores]
+"app/tests/*" = ["ANN", "S"]
+"alembic/*" = ["ANN", "N999"]
+
+[tool.ruff.lint.isort]
+known-first-party = ["app"]
+force-sort-within-sections = true
+
+# ── MyPy (Type Checker) ──────────────────────────────────────
+[tool.mypy]
+python_version = "3.12"
+strict = true
+plugins = ["pydantic.mypy", "sqlalchemy.ext.mypy.plugin"]
+exclude = ["alembic/", "app/tests/"]
+
+[[tool.mypy.overrides]]
+module = [
+    "torch.*",
+    "torch_geometric.*",
+    "networkx.*",
+    "web3.*",
+    "shap.*",
+    "captum.*",
+    "celery.*",
+    "redis.*",
+    "xgboost.*",
+]
+ignore_missing_imports = true
+
+# ── Pytest ───────────────────────────────────────────────────
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["app/tests"]
+python_files = ["test_*.py", "*_test.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+addopts = [
+    "--strict-markers",
+    "--tb=short",
+    "-v",
+]
+markers = [
+    "unit: Unit tests (no external dependencies)",
+    "integration: Integration tests (require DB/Redis)",
+    "ml: Machine learning model tests",
+    "slow: Slow tests (skip with -m 'not slow')",
+]
+
+# ── Coverage ─────────────────────────────────────────────────
+[tool.coverage.run]
+source = ["app"]
+omit = ["app/tests/*", "alembic/*"]
+
+[tool.coverage.report]
+show_missing = true
+fail_under = 70

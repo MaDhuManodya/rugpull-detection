@@ -1,0 +1,83 @@
+# ============================================================
+# Rugpull Detection — .gitignore
+# ============================================================
+
+# ── Python ───────────────────────────────────────────────────
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+*.egg
+*.egg-info/
+dist/
+build/
+.eggs/
+.Python
+.venv/
+venv/
+env/
+ENV/
+pip-log.txt
+pip-delete-this-directory.txt
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+.tox/
+*.log
+
+# ── Environment ───────────────────────────────────────────────
+.env
+.env.local
+.env.*.local
+!.env.example
+
+# ── ML / Models ───────────────────────────────────────────────
+trained_models/*.pt
+trained_models/*.pth
+trained_models/*.pkl
+trained_models/*.joblib
+trained_models/*.onnx
+!trained_models/.gitkeep
+
+# ── Data ─────────────────────────────────────────────────────
+datasets/*.csv
+datasets/*.parquet
+datasets/*.json
+datasets/*.jsonl
+!datasets/README.md
+
+# ── Node.js / Frontend ───────────────────────────────────────
+node_modules/
+frontend/.next/
+frontend/out/
+frontend/dist/
+frontend/.env.local
+.npm
+.eslintcache
+
+# ── Docker ───────────────────────────────────────────────────
+docker-compose.override.yml
+
+# ── Database ─────────────────────────────────────────────────
+*.db
+*.sqlite
+*.sqlite3
+
+# ── IDE / OS ─────────────────────────────────────────────────
+.idea/
+.vscode/settings.json
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ── Jupyter ───────────────────────────────────────────────────
+.ipynb_checkpoints/
+experiments/*.ipynb
+
+# ── Alembic ───────────────────────────────────────────────────
+# keep versions tracked, ignore pycache
+alembic/__pycache__/
