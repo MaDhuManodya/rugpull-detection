@@ -1,10 +1,10 @@
 ,0
-Total projects,1049641
+Total projects,3427
 Ethereum projects,2989
 BSC projects,391
 Polygon projects,24
-Positive labels (Rugpull),1049214
+Positive labels (Rugpull),3000
 Negative labels (Legit),427
-Missing fields,5239994
-Duplicate records,384023
-Class imbalance,99.96% Positive
+Missing fields,8924
+Duplicate records,6
+Class imbalance,87.54% Positive
