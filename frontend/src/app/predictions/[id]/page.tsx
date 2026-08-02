@@ -104,4 +104,4 @@ export default function PredictionDetail({ params }: { params: { id: string } })
       </Card>
     </div>
   )
-}\n
+}

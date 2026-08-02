@@ -67,4 +67,4 @@ function StatCard({title, value, icon}: {title: string, value: string, icon: Rea
       </CardContent>
     </Card>
   )
-}\n
+}

@@ -23,4 +23,4 @@ export default function Metrics() {
       </div>
     </div>
   )
-}\n
+}

@@ -3,7 +3,7 @@ import os
 def create_file(path, content):
     os.makedirs(os.path.dirname(path), exist_ok=True)
     with open(path, "w", encoding="utf-8") as f:
-        f.write(content.strip() + "\\n")
+        f.write(content.strip() + "\n")
 
 # Providers
 create_file("frontend/src/components/Providers.tsx", """

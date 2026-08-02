@@ -6,4 +6,4 @@ export default function Predictions() {
       <p className="text-gray-400">Stream of ongoing model inferences across all processed tokens.</p>
     </div>
   )
-}\n
+}
